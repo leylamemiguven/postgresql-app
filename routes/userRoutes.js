@@ -2,13 +2,8 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 
-// Route to log usernames
-router.get('/', userController.logUsernames);
-
-// Route to display the form
-router.get('/new', userController.displayForm);
-
-// Route to handle form submission
-router.post('/new', userController.saveUsername);
+router.get('/create-username', userController.createUsernameGet);
+router.post('/create-username', userController.createUsernamePost);
+router.get('/', userController.getUsernames);
 
 module.exports = router;

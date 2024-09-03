@@ -1,21 +1,23 @@
-// Simulated "database"
-const usernames = [];
+const db = require("../db/queries");
 
-// Log available usernames
-exports.logUsernames = (req, res) => {
-    console.log("usernames will be logged here - wip");
-    res.send("Usernames logged to the terminal (check your console).");
-};
+async function getUsernames(req, res) {
+  const usernames = await db.getAllUsernames();
+  console.log("Usernames: ", usernames);
+  res.send("Usernames: " + usernames.map(user => user.username).join(", "));
+}
 
-// Display the form
-exports.displayForm = (req, res) => {
-    res.sendFile(__dirname + '/views/newUser.html');
-};
+async function createUsernameGet(req, res) {
+    res.render("createUsername"); 
+}
 
-// Save the incoming username
-exports.saveUsername = (req, res) => {
-    const username = req.body.username;
-    console.log("username to be saved: ", username);
-    usernames.push(username); // Save the username to the "database"
-    res.redirect('/'); // Redirect to the homepage
+async function createUsernamePost(req, res) {
+  const { username } = req.body;
+  await db.insertUsername(username);
+  res.redirect("/");
+}
+
+module.exports = {
+  getUsernames,
+  createUsernameGet,
+  createUsernamePost
 };
